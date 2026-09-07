@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Gift Corner</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#fff7fa;color:#222}
+header{background:#171717;color:#fff;padding:14px 5%;display:flex;align-items:center;gap:20px;position:sticky;top:0;z-index:5}
+.logo{font-size:25px;font-weight:800;color:#ffd33d}.logo span{color:#ff3b75}nav{margin-left:auto}nav a{color:#fff;text-decoration:none;margin:0 10px}
+.hero{margin:20px auto;max-width:1150px;padding:55px 7%;border-radius:20px;background:linear-gradient(120deg,#241117,#ff3b75);color:#fff;display:flex;justify-content:space-between;align-items:center}
+.hero h1{font-size:48px;margin:0 0 8px}.btn{background:#ffd33d;border:0;border-radius:25px;padding:13px 22px;font-weight:bold;cursor:pointer}
+main{max-width:1150px;margin:auto;padding:0 18px}.cats{display:flex;gap:8px;overflow:auto;padding:10px 0}.cat{padding:10px 16px;border:1px solid #ffd0dd;background:#fff;border-radius:22px;white-space:nowrap}
+h2{text-align:center}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.card{background:#fff;border-radius:15px;box-shadow:0 3px 15px #0001;overflow:hidden}.pic{height:190px;display:flex;align-items:center;justify-content:center;font-size:75px;background:#ffe8ef}.body{padding:14px}.price{font-weight:bold;color:#c5164e;font-size:20px}.add{width:100%;padding:10px;border:0;border-radius:8px;background:#ff3b75;color:#fff;font-weight:bold}
+.banner{margin:35px 0;padding:30px;text-align:center;border-radius:18px;background:#211319;color:#fff}.features{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.feature{background:#fff;padding:20px;text-align:center;border-radius:12px}
+footer{margin-top:40px;padding:35px;text-align:center;background:#171717;color:#fff}.cart{position:fixed;right:18px;bottom:18px;border:0;border-radius:25px;padding:14px 20px;background:#ff3b75;color:#fff;font-weight:bold;z-index:8}
+.modal{display:none;position:fixed;inset:0;background:#0008;z-index:20;align-items:center;justify-content:center}.box{background:#fff;padding:25px;border-radius:15px;width:min(500px,92%)}input,textarea{width:100%;padding:11px;margin:6px 0;border:1px solid #ddd;border-radius:8px}.close{float:right;border:0;background:none;font-size:24px}
+@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}.features{grid-template-columns:repeat(2,1fr)}nav{display:none}.hero h1{font-size:38px}}
+</style></head>
+<body>
+<header><div class="logo">The <span>Gift</span> Corner</div><nav><a href="#home">Home</a><a href="#shop">Shop</a><a href="#contact">Contact</a></nav></header>
+<section class="hero" id="home"><div><h1>The Gift Corner ❤️</h1><p>Your Memories, Our Creations</p><p>Customized Gifts for Every Special Moment</p><button class="btn" onclick="location.hash='shop'">Shop Now →</button></div><div style="font-size:110px">🎁</div></section>
+<main>
+<div class="cats"><button class="cat" onclick="filter('All')">🎁 All</button><button class="cat" onclick="filter('Couple')">❤️ Couple</button><button class="cat" onclick="filter('Birthday')">🎂 Birthday</button><button class="cat" onclick="filter('Fashion')">👕 Fashion</button><button class="cat" onclick="filter('Customize')">✨ Customize</button></div>
+<h2 id="shop">Featured Products</h2><div class="grid" id="grid"></div>
+<div class="banner"><h2>Make It Customized ✨</h2><p>Your Photo • Your Name • Your Style</p><button class="btn" onclick="customize()">Customize Now</button></div>
+<h2>Why Choose The Gift Corner?</h2><div class="features"><div class="feature">💎<br><b>Premium Quality</b></div><div class="feature">🔒<br><b>Safe Payment</b></div><div class="feature">🚚<br><b>Delivery Available</b></div><div class="feature">💬<br><b>WhatsApp Support</b></div></div>
+</main>
+<button class="cart" onclick="showCart()">🛒 Cart (<span id="count">0</span>)</button>
+<footer id="contact"><h2>The Gift Corner</h2><p>Your Memories, Our Creations ❤️</p><p>WhatsApp: +91 90919 24563</p><p>Delivery Available</p></footer>
+<div class="modal" id="modal"><div class="box"><button class="close" onclick="closeM()">×</button><div id="content"></div></div></div>
+<script>
+const P=[
+['Rose Gift',249,'All Couple Birthday Anniversary','🌹'],
+['Premium Check Shirt',439,'All Fashion','👕'],
+['Customized Mug',199,'All Customize Couple Birthday','☕'],
+['Photo Keychain',149,'All Customize Couple','🔑'],
+['Photo Frame',299,'All Customize Couple','🖼️'],
+['Custom T-Shirt',349,'All Customize Fashion','👚']];
+let cat='All',cart=[];
+function filter(c){cat=c;render()}
+function render(){document.getElementById('grid').innerHTML=P.filter(p=>p[2].includes(cat)).map((p,i)=>`<div class="card"><div class="pic">${p[3]}</div><div class="body"><b>${p[0]}</b><p class="price">₹${p[1]} /-</p><button class="add" onclick="add(${i})">Add to Cart</button></div></div>`).join('')}
+function add(i){cart.push(P[i]);document.getElementById('count').textContent=cart.length}
+function showCart(){let total=cart.reduce((s,p)=>s+p[1],0);document.getElementById('content').innerHTML='<h2>Your Cart 🛒</h2>'+(cart.length?cart.map(p=>`<p>${p[0]} — ₹${p[1]}</p>`).join('')+`<hr><h3>Total: ₹${total}</h3><button class="add" onclick="order()">Order on WhatsApp</button>`:'<p>Your cart is empty.</p>');document.getElementById('modal').style.display='flex'}
+function order(){let msg=encodeURIComponent('Hello The Gift Corner! I want to order: '+cart.map(p=>p[0]+' ₹'+p[1]).join(', ')+' | Total ₹'+cart.reduce((s,p)=>s+p[1],0));window.open('https://wa.me/919091924563?text='+msg,'_blank')}
+function customize(){document.getElementById('content').innerHTML='<h2>Customize Your Gift ✨</h2><input id="n" placeholder="Your Name"><input id="p" placeholder="Product Name"><textarea id="d" placeholder="Customization details"></textarea><button class="add" onclick="send()">Send on WhatsApp</button>';document.getElementById('modal').style.display='flex'}
+function send(){let m=encodeURIComponent('Hello The Gift Corner! Custom Gift Request\nName: '+n.value+'\nProduct: '+p.value+'\nDetails: '+d.value);window.open('https://wa.me/919091924563?text='+m,'_blank')}
+function closeM(){document.getElementById('modal').style.display='none'}render();
+</script></body></html>
